@@ -4,17 +4,16 @@
 # Environment: dev
 # Image Version: main-214dd7a
 # Helm Templates: v1.0.2
-# Generated: 2025-11-05 10:08:51 UTC
+# Generated: 2025-11-05 10:08:50 UTC
 # Commit SHA: 214dd7a66a8ba4523fb74598cfd704efde0e899c
 # Workflow: https://github.com/ritual-app/recording_webhook/actions/runs/19098383645
 ---
 ---
-# Source: microservice/templates/service.yaml
-apiVersion: v1
-kind: Service
+# Source: microservice/templates/gateway.yaml
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
 metadata:
   name: recording-webhook-microservice
-  namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
     app.kubernetes.io/name: microservice
@@ -29,17 +28,27 @@ metadata:
     team: backend
     tier: api
   annotations:
-    cloud.google.com/neg: '{"ingress": true}'
     cloud.google.com/backend-config: '{"default": "recording-webhook-microservice-backend-config"}'
-    cloud.google.com/neg: '{"ingress": true}'
 spec:
-  type: ClusterIP
-  ports:
-    - port: 8080
-      targetPort: 8080
-      protocol: TCP
-      name: http
-  selector:
-    app.kubernetes.io/name: microservice
-    app.kubernetes.io/instance: recording-webhook
-    app: recording-webhook
+  gatewayClassName: gke-l7-global-external-managed
+  addresses:
+    - type: NamedAddress
+      value: dev-ingress-ip
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: https
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Same
+      # Use Certificate Manager wildcard certificate - INSTANT provisioning!
+      tls:
+        mode: Terminate
+        options:
+          networking.gke.io/certificate-map: dev-ourritual-map

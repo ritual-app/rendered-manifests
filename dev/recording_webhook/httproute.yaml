@@ -9,12 +9,11 @@
 # Workflow: https://github.com/ritual-app/recording_webhook/actions/runs/19098383645
 ---
 ---
-# Source: microservice/templates/hpa.yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+# Source: microservice/templates/httproute.yaml
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
 metadata:
   name: recording-webhook-microservice
-  namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
     app.kubernetes.io/name: microservice
@@ -29,22 +28,23 @@ metadata:
     team: backend
     tier: api
 spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: recording-webhook-microservice
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 80
+  parentRefs:
+    - name: recording-webhook-microservice
+      namespace: dev
+  hostnames:
+    - "recording-webhook.dev.ourritual.com"
+  rules:
+    # HTTP -> HTTPS redirect
+    - matches:
+        - headers:
+            - name: ":scheme"
+              value: "http"
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+    # Main HTTPS route
+    - backendRefs:
+        - name: recording-webhook-microservice
+          port: 8080
