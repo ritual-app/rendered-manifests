@@ -9,11 +9,11 @@
 # Workflow: https://github.com/ritual-app/recording_webhook/actions/runs/19098039761
 ---
 ---
-# Source: microservice/templates/secret.yaml
-apiVersion: v1
-kind: Secret
+# Source: microservice/templates/managedcertificate.yaml
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
 metadata:
-  name: recording-webhook-microservice-secrets
+  name: recording-webhook-microservice-cert
   namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
@@ -28,13 +28,6 @@ metadata:
     managed-by: argocd
     team: backend
     tier: api
-  annotations:
-    # Google Secret Manager integration
-    secret-manager.io/RECORDING_WEBHOOK_CONFIG: "projects/ritual-app-dev-104fc/secrets/recording-webhook/versions/latest"
-    secret-manager.io/COMMON_SECRETS: "projects/ritual-app-dev-104fc/secrets/common-secrets/versions/latest"
-type: Opaque
-data:
-  # Value will be injected by External Secrets Operator or Secret Manager
-  RECORDING_WEBHOOK_CONFIG: ""
-  # Value will be injected by External Secrets Operator or Secret Manager
-  COMMON_SECRETS: ""
+spec:
+  domains:
+    - recording-webhook.dev.ourritual.com
