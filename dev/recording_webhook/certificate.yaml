@@ -9,12 +9,11 @@
 # Workflow: https://github.com/ritual-app/recording_webhook/actions/runs/19100688478
 ---
 ---
-# Source: microservice/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
+# Source: microservice/templates/certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
 metadata:
-  name: recording-webhook-sa
-  namespace: dev
+  name: recording-webhook-microservice-tls
   labels:
     helm.sh/chart: microservice-1.0.0
     app.kubernetes.io/name: microservice
@@ -28,5 +27,12 @@ metadata:
     managed-by: argocd
     team: backend
     tier: api
-  annotations:
-    iam.gke.io/gcp-service-account: recording-webhook-sa@ritual-app-dev-104fc.iam.gserviceaccount.com
+spec:
+  secretName: recording-webhook-microservice-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - recording-webhook.dev.ourritual.com
+  # Let's Encrypt certificates are valid for 90 days, renew 30 days before expiry
+  renewBefore: 720h  # 30 days
