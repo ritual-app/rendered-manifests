@@ -9,11 +9,11 @@
 # Workflow: https://github.com/ritual-app/recording_webhook/actions/runs/19095875959
 ---
 ---
-# Source: microservice/templates/hpa.yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+# Source: microservice/templates/backendconfig.yaml
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
 metadata:
-  name: recording-webhook-microservice
+  name: recording-webhook-microservice-backend-config
   namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
@@ -29,22 +29,14 @@ metadata:
     team: backend
     tier: api
 spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: recording-webhook-microservice
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 80
+  timeoutSec: 30
+  connectionDraining:
+    drainingTimeoutSec: 30
+  healthCheck:
+    checkIntervalSec: 5
+    healthyThreshold: 1
+    port: 8080
+    requestPath: /
+    timeoutSec: 3
+    type: HTTP
+    unhealthyThreshold: 2
