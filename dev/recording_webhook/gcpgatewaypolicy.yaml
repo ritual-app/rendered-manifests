@@ -9,11 +9,11 @@
 # Workflow: https://github.com/ritual-app/recording_webhook/actions/runs/19098538694
 ---
 ---
-# Source: microservice/templates/httproute.yaml
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: HTTPRoute
+# Source: microservice/templates/gcpgatewaypolicy.yaml
+apiVersion: networking.gke.io/v1
+kind: GCPGatewayPolicy
 metadata:
-  name: recording-webhook-microservice
+  name: recording-webhook-microservice-redirect
   labels:
     helm.sh/chart: microservice-1.0.0
     app.kubernetes.io/name: microservice
@@ -28,12 +28,9 @@ metadata:
     team: backend
     tier: api
 spec:
-  parentRefs:
-    - name: recording-webhook-microservice
-      namespace: dev
-  hostnames:
-    - "recording-webhook.dev.ourritual.com"
-  rules:
-    - backendRefs:
-        - name: recording-webhook-microservice
-          port: 8080
+  default:
+    allowHTTPTraffic: false  # Force HTTPS - auto-redirects HTTP to HTTPS
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: recording-webhook-microservice
