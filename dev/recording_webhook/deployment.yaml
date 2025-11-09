@@ -4,9 +4,9 @@
 # Environment: dev
 # Image Version: main-6d5525f (unchanged - values only update)
 # Helm Templates: v1.1.3
-# Generated: 2025-11-09 08:26:57 UTC
-# Commit SHA: 79be4c75946bb233dea7d52001ec30755b1c10f2
-# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19205812007
+# Generated: 2025-11-09 08:32:06 UTC
+# Commit SHA: 4404e7f7e2c4f94d80ba3761dc3046c6bf1787e5
+# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19205866473
 # Reason: Values change in helm-values repository
 ---
 ---
@@ -90,6 +90,46 @@ spec:
               value: ritual-app-dev-104fc
             - name: REGION
               value: us-east1
+            - name: env
+              value: dev
+            - name: log_level
+              value: INFO
+            - name: log_type
+              value: gcp
+            - name: debug
+              value: "false"
+            - name: sentry_live
+              value: "true"
+            - name: enable_app_metrics
+              value: "true"
+            - name: gcp_project_id
+              value: ritual-app-dev-104fc
+            - name: outgoing_topic
+              value: recording-consumer
+            - name: dlq_subscription
+              value: recording-webhook-dlq
+            - name: bucket_name
+              value: ritual-sessions-dev
+            - name: authentication_url
+              value: https://3lxyswdxqgvxkqvrc2r4h6vam40ymhys.lambda-url.us-east-1.on.aws/
+            - name: management_url
+              value: http://management.ritual.internal
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: http/protobuf
+            - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+              value: http/protobuf
+            - name: OTEL_EXPORTER_OTLP_METRICS_PROTOCOL
+              value: http/protobuf
+            - name: OTEL_EXPORTER_OTLP_LOGS_PROTOCOL
+              value: http/protobuf
+            - name: OTEL_EXPORTER_OTLP_TIMEOUT
+              value: "60000"
+            - name: OTEL_EXPORTER_OTLP_METRICS_TIMEOUT
+              value: "60000"
+            - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+              value: delta
+            - name: SPANNER_ENABLE_END_TO_END_TRACING
+              value: "true"
           envFrom:
             - secretRef:
                 name: recording-webhook-microservice-secrets
