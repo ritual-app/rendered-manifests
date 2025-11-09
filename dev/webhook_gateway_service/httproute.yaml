@@ -4,9 +4,9 @@
 # Environment: dev
 # Image Version: main-latest (unchanged - values only update)
 # Helm Templates: v1.1.3
-# Generated: 2025-11-09 11:53:28 UTC
-# Commit SHA: bf258b4b8c067d770eb0f66529dd41d53bcd5d71
-# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19208058781
+# Generated: 2025-11-09 12:41:36 UTC
+# Commit SHA: b619bce77c1e596cdc1b059275d8ac8fd4f33cce
+# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19208606214
 # Reason: Values change in helm-values repository
 ---
 ---
@@ -33,7 +33,7 @@ spec:
     - name: webhook-gateway-service-microservice
       namespace: dev
   hostnames:
-    - "webhook-gateway-service.dev.ourritual.com"
+    - "webhooks.dev.ourritual.com"
   rules:
     - backendRefs:
         - name: webhook-gateway-service-microservice
