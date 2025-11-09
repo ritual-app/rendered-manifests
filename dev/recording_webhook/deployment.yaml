@@ -4,9 +4,9 @@
 # Environment: dev
 # Image Version: main-6d5525f (unchanged - values only update)
 # Helm Templates: v1.1.3
-# Generated: 2025-11-06 13:33:55 UTC
-# Commit SHA: 47c4f6928dcaf24a404dbd15afebdd2c6a7caa33
-# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19137401559
+# Generated: 2025-11-09 08:26:57 UTC
+# Commit SHA: 79be4c75946bb233dea7d52001ec30755b1c10f2
+# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19205812007
 # Reason: Values change in helm-values repository
 ---
 ---
@@ -85,6 +85,8 @@ spec:
             - name: PORT
               value: "8080"
             - name: PROJECT_ID
+              value: ritual-app-dev-104fc
+            - name: GCP_PROJECT_ID
               value: ritual-app-dev-104fc
             - name: REGION
               value: us-east1
