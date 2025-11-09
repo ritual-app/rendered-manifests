@@ -4,9 +4,9 @@
 # Environment: dev
 # Image Version: main-6d5525f (unchanged - values only update)
 # Helm Templates: v1.1.3
-# Generated: 2025-11-09 09:20:46 UTC
-# Commit SHA: d76ce617392aa4cb1a11c07125f48ba30c6658e4
-# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19206427946
+# Generated: 2025-11-09 09:22:02 UTC
+# Commit SHA: 57a585d3aceed957c661eee92367bbf2c02b6115
+# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19206443791
 # Reason: Values change in helm-values repository
 ---
 ---
@@ -52,7 +52,7 @@ spec:
         tier: api
       annotations:
         # Force pod restart on config/secret changes
-        checksum/config: 483024cc49b184c20615b42f18e0b703bb2cfeb10a3e3dea65499e9ace7ec82c
+        checksum/config: 75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070
         prometheus.io/path: /metrics
         prometheus.io/port: "8080"
         prometheus.io/scrape: "true"
@@ -90,9 +90,6 @@ spec:
               value: DEBUG
             - name: REGION
               value: us-east1
-          envFrom:
-            - secretRef:
-                name: recording-webhook-microservice-secrets
           livenessProbe:
             failureThreshold: 3
             httpGet:
