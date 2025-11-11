@@ -9,12 +9,11 @@
 # Workflow: https://github.com/ritual-app/recording-consumer/actions/runs/19277336278
 ---
 ---
-# Source: microservice/templates/hpa.yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+# Source: microservice/templates/httproute.yaml
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
 metadata:
-  name: recording-consumer-microservice
-  namespace: dev
+  name: recording-consumer-microservice-swagger
   labels:
     helm.sh/chart: microservice-1.0.0
     app.kubernetes.io/name: microservice
@@ -24,22 +23,16 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     environment: dev
 spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: recording-consumer-microservice
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 80
+  parentRefs:
+    - name: swagger-gateway
+      namespace: dev
+  hostnames:
+    - "swagger.dev.ourritual.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /recording-consumer
+      backendRefs:
+        - name: recording-consumer-microservice
+          port: 8080

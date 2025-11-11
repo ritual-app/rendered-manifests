@@ -9,11 +9,11 @@
 # Workflow: https://github.com/ritual-app/recording-consumer/actions/runs/19277336278
 ---
 ---
-# Source: microservice/templates/hpa.yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+# Source: microservice/templates/gcpbackendpolicy.yaml
+apiVersion: networking.gke.io/v1
+kind: GCPBackendPolicy
 metadata:
-  name: recording-consumer-microservice
+  name: recording-consumer-microservice-backend-policy
   namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
@@ -24,22 +24,21 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     environment: dev
 spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
+  # Attach this policy to the service
+  targetRef:
+    group: ""
+    kind: Service
     name: recording-consumer-microservice
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 80
+  default:
+    # 🔒 Identity-Aware Proxy (IAP) Configuration
+    iap:
+      enabled: true
+      clientID: "1065179748589-1fcsfo37foa6ghcf5dao83t9el4qqk4k.apps.googleusercontent.com"
+      oauth2ClientSecret:
+        name: swagger-iap-oauth
+    # 📌 Session Affinity Configuration
+    sessionAffinity:
+      type: CLIENT_IP
+      cookieTtlSec: 3600
+    # ⏱️ Timeout Configuration
+    timeoutSec: 30
