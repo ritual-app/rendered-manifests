@@ -4,16 +4,16 @@
 # Environment: dev
 # Image Version: debug_k8ns-337c0e1
 # Helm Templates: v1.3.2
-# Generated: 2025-11-11 20:13:42 UTC
+# Generated: 2025-11-11 20:13:41 UTC
 # Commit SHA: 337c0e1325b5dbb1ef3c2d4f2d59f3a2bede2ba7
 # Workflow: https://github.com/ritual-app/transcriber/actions/runs/19277339853
 ---
 ---
-# Source: microservice/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
+# Source: microservice/templates/backendconfig.yaml
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
 metadata:
-  name: transcriber-sa
+  name: transcriber-microservice-backend-config
   namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
@@ -29,5 +29,15 @@ metadata:
     team: backend
     tier: ai
     workload: heavy
-  annotations:
-    iam.gke.io/gcp-service-account: transcriber-sa@ritual-app-dev-104fc.iam.gserviceaccount.com
+spec:
+  # Identity-Aware Proxy (IAP) configuration
+  iap:
+    enabled: true
+    oauthclientCredentials:
+      secretName: swagger-iap-oauth
+  # Session affinity configuration
+  sessionAffinity:
+    affinityType: CLIENT_IP
+    affinityCookieTtlSec: 3600
+  # Backend timeout
+  timeoutSec: 30

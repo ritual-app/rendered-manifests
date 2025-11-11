@@ -9,11 +9,11 @@
 # Workflow: https://github.com/ritual-app/transcriber/actions/runs/19277339853
 ---
 ---
-# Source: microservice/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
+# Source: microservice/templates/gcpbackendpolicy.yaml
+apiVersion: networking.gke.io/v1
+kind: GCPBackendPolicy
 metadata:
-  name: transcriber-sa
+  name: transcriber-microservice-backend-policy
   namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
@@ -29,5 +29,22 @@ metadata:
     team: backend
     tier: ai
     workload: heavy
-  annotations:
-    iam.gke.io/gcp-service-account: transcriber-sa@ritual-app-dev-104fc.iam.gserviceaccount.com
+spec:
+  # Attach this policy to the service
+  targetRef:
+    group: ""
+    kind: Service
+    name: transcriber-microservice
+  default:
+    # 🔒 Identity-Aware Proxy (IAP) Configuration
+    iap:
+      enabled: true
+      clientID: "1065179748589-1fcsfo37foa6ghcf5dao83t9el4qqk4k.apps.googleusercontent.com"
+      oauth2ClientSecret:
+        name: swagger-iap-oauth
+    # 📌 Session Affinity Configuration
+    sessionAffinity:
+      type: CLIENT_IP
+      cookieTtlSec: 3600
+    # ⏱️ Timeout Configuration
+    timeoutSec: 30

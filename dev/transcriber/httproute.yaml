@@ -9,12 +9,11 @@
 # Workflow: https://github.com/ritual-app/transcriber/actions/runs/19277339853
 ---
 ---
-# Source: microservice/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
+# Source: microservice/templates/httproute.yaml
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
 metadata:
-  name: transcriber-sa
-  namespace: dev
+  name: transcriber-microservice-swagger
   labels:
     helm.sh/chart: microservice-1.0.0
     app.kubernetes.io/name: microservice
@@ -29,5 +28,17 @@ metadata:
     team: backend
     tier: ai
     workload: heavy
-  annotations:
-    iam.gke.io/gcp-service-account: transcriber-sa@ritual-app-dev-104fc.iam.gserviceaccount.com
+spec:
+  parentRefs:
+    - name: swagger-gateway
+      namespace: dev
+  hostnames:
+    - "swagger.dev.ourritual.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /transcriber
+      backendRefs:
+        - name: transcriber-microservice
+          port: 8080
