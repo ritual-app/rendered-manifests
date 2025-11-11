@@ -69,7 +69,7 @@ spec:
             - name: ENVIRONMENT
               value: dev
             - name: LOG_LEVEL
-              value: INFO
+              value: DEBUG
             - name: REGION
               value: us-east1
             # Parameters from GCP Parameter Manager (auto-fetched during deployment)
