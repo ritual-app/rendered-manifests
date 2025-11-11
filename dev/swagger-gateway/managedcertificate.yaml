@@ -1,0 +1,21 @@
+---
+# Source: microservice/templates/managedcertificate.yaml
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: swagger-gateway-microservice-cert
+  namespace: dev
+  labels:
+    helm.sh/chart: microservice-1.0.0
+    app.kubernetes.io/name: microservice
+    app.kubernetes.io/instance: swagger-gateway
+    app: swagger-gateway
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Helm
+    environment: dev
+    app: swagger-gateway
+    component: api-docs
+    tier: infrastructure
+spec:
+  domains:
+    - swagger.dev.ourritual.com

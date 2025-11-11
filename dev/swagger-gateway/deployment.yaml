@@ -1,0 +1,82 @@
+---
+# Source: microservice/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-gateway-microservice
+  namespace: dev
+  labels:
+    helm.sh/chart: microservice-1.0.0
+    app.kubernetes.io/name: microservice
+    app.kubernetes.io/instance: swagger-gateway
+    app: swagger-gateway
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Helm
+    environment: dev
+    app: swagger-gateway
+    component: api-docs
+    tier: infrastructure
+  annotations:
+    description: Centralized Swagger gateway with IAP protection
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: microservice
+      app.kubernetes.io/instance: swagger-gateway
+      app: swagger-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: microservice
+        app.kubernetes.io/instance: swagger-gateway
+        app: swagger-gateway
+        app: swagger-gateway
+        component: api-docs
+        tier: infrastructure
+      annotations:
+        # Force pod restart on config/secret changes
+        checksum/config: 75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070
+        description: Centralized Swagger gateway with IAP protection
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: microservice
+          image: "nginx:alpine"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: NGINX_PORT
+              value: "80"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi

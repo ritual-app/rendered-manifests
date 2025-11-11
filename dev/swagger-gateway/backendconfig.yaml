@@ -1,0 +1,39 @@
+---
+# Source: microservice/templates/backendconfig.yaml
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: swagger-gateway-microservice-backend-config
+  namespace: dev
+  labels:
+    helm.sh/chart: microservice-1.0.0
+    app.kubernetes.io/name: microservice
+    app.kubernetes.io/instance: swagger-gateway
+    app: swagger-gateway
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Helm
+    environment: dev
+    app: swagger-gateway
+    component: api-docs
+    tier: infrastructure
+spec:
+  # Identity-Aware Proxy (IAP) configuration
+  iap:
+    enabled: true
+    oauthclientCredentials:
+      secretName: swagger-iap-oauth
+  # Health check configuration
+  healthCheck:
+    checkIntervalSec: 30
+    timeoutSec: 5
+    healthyThreshold: 2
+    unhealthyThreshold: 3
+    type: HTTP
+    requestPath: /
+    port: 80
+  # Session affinity configuration
+  sessionAffinity:
+    affinityType: CLIENT_IP
+    affinityCookieTtlSec: 3600
+  # Backend timeout
+  timeoutSec: 30
