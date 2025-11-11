@@ -9,12 +9,11 @@
 # Workflow: https://github.com/ritual-app/insights-engine/actions/runs/19277343028
 ---
 ---
-# Source: microservice/templates/externalsecret.yaml
-# ExternalSecret - Syncs secrets from GCP Secret Manager to Kubernetes
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
+# Source: microservice/templates/backendconfig.yaml
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
 metadata:
-  name: insights-engine-microservice-config
+  name: insights-engine-microservice-backend-config
   namespace: dev
   labels:
     helm.sh/chart: microservice-1.0.0
@@ -24,19 +23,15 @@ metadata:
     app.kubernetes.io/version: "1.0"
     app.kubernetes.io/managed-by: Helm
     environment: dev
-    component: external-secrets
 spec:
-  refreshInterval: 1h
-  secretStoreRef:
-    name: insights-engine-microservice-secret-store
-    kind: SecretStore
-  target:
-    name: insights-engine-microservice-secrets
-    creationPolicy: Owner
-    deletionPolicy: Retain
-  # Fetch entire secret(s) and flatten all keys
-  dataFrom:
-    - extract:
-        key: insights-engine
-    - extract:
-        key: common-secrets
+  # Identity-Aware Proxy (IAP) configuration
+  iap:
+    enabled: true
+    oauthclientCredentials:
+      secretName: swagger-iap-oauth
+  # Session affinity configuration
+  sessionAffinity:
+    affinityType: CLIENT_IP
+    affinityCookieTtlSec: 3600
+  # Backend timeout
+  timeoutSec: 30
