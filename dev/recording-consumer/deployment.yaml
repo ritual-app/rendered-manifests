@@ -104,7 +104,7 @@ spec:
             - name: incoming_topic
               value: "recording-consumer-sub"
             - name: log_level
-              value: "INFO"
+              value: "DEBUG"
             - name: log_type
               value: "gcp"
             - name: management_url
