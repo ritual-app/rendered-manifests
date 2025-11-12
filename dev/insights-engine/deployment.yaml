@@ -4,9 +4,9 @@
 # Environment: dev
 # Image Version: debug_k8ns-34176d4 (unchanged - values only update)
 # Helm Templates: v1.3.2
-# Generated: 2025-11-12 12:38:57 UTC
-# Commit SHA: 1d2d9da4941e6e3692cccde3a65671c70bc6c90b
-# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19297720862
+# Generated: 2025-11-12 12:39:11 UTC
+# Commit SHA: 89e0bb161d4a4fbcb99f965479e98e6d4314d02e
+# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19297722045
 # Reason: Values change in helm-values repository
 ---
 ---
