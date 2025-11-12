@@ -4,9 +4,9 @@
 # Environment: dev
 # Image Version: debug_k8ns-1102217 (unchanged - values only update)
 # Helm Templates: v1.3.2
-# Generated: 2025-11-12 12:39:10 UTC
-# Commit SHA: 89e0bb161d4a4fbcb99f965479e98e6d4314d02e
-# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19297722045
+# Generated: 2025-11-12 12:58:02 UTC
+# Commit SHA: 63580c49b8e4e748bffef45583989b70b0c2a966
+# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19298209882
 # Reason: Values change in helm-values repository
 ---
 ---
@@ -36,7 +36,7 @@ spec:
     kind: Deployment
     name: transcriber-microservice
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 1
   metrics:
     - type: Resource
       resource:
