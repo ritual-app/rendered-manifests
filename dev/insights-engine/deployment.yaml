@@ -4,9 +4,9 @@
 # Environment: dev
 # Image Version: debug_k8ns-34176d4 (unchanged - values only update)
 # Helm Templates: v1.3.2
-# Generated: 2025-11-12 12:39:11 UTC
-# Commit SHA: 89e0bb161d4a4fbcb99f965479e98e6d4314d02e
-# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19297722045
+# Generated: 2025-11-12 13:10:19 UTC
+# Commit SHA: 0bbc312fb98f693f23229befc190541f84ce4b6c
+# Workflow: https://github.com/ritual-app/helm-values/actions/runs/19298538334
 # Reason: Values change in helm-values repository
 ---
 ---
@@ -73,6 +73,47 @@ spec:
               value: INFO
             - name: REGION
               value: us-east1
+            # Parameters from GCP Parameter Manager (auto-fetched during deployment)
+            - name: BUCKET_NAME
+              value: "ritual-sessions-dev"
+            - name: DLQ_SUBSCRIPTION
+              value: "insights-engine-dlq"
+            - name: INCOMING_TOPIC
+              value: "insights-engine-sub"
+            - name: OTEL_EXPORTER_OTLP_LOGS_PROTOCOL
+              value: "http/protobuf"
+            - name: OTEL_EXPORTER_OTLP_METRICS_PROTOCOL
+              value: "http/protobuf"
+            - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+              value: "delta"
+            - name: OTEL_EXPORTER_OTLP_METRICS_TIMEOUT
+              value: "60000"
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: "http/protobuf"
+            - name: OTEL_EXPORTER_OTLP_TIMEOUT
+              value: "60000"
+            - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+              value: "http/protobuf"
+            - name: SPANNER_ENABLE_END_TO_END_TRACING
+              value: "true"
+            - name: authentication_url
+              value: "https://3lxyswdxqgvxkqvrc2r4h6vam40ymhys.lambda-url.us-east-1.on.aws/"
+            - name: debug
+              value: "true"
+            - name: enable_app_metrics
+              value: "true"
+            - name: env
+              value: "dev"
+            - name: gcp_project_id
+              value: "ritual-app-dev-104fc"
+            - name: log_level
+              value: "DEBUG"
+            - name: log_type
+              value: "gcp"
+            - name: management_url
+              value: "http://management.ritual.internal"
+            - name: sentry_live
+              value: "true"
           envFrom:
             - secretRef:
                 name: insights-engine-microservice-secrets
